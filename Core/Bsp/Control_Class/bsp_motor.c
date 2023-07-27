@@ -8,6 +8,8 @@ extern MotorCore_t MotorCore;
 
 static MotorEncoder_t Motor_Encoder[MSum];
 
+static int32_t MotorOffset[MSum];
+
 static _pid pid_location[MSum];
 
 static _pid pid_speed[MSum];
@@ -51,7 +53,7 @@ void Motor_Init(MotorControl_t *User_Motor)
     pid_init(&pid_location[MLeft], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_location[MRight], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_Angle, (float) 0.0025, (float) 0.00, (float) 0.04);
-    pid_init(&pid_Line, (float) 0.3, (float) 0.00, (float)1.5);
+    pid_init(&pid_Line, (float) 0.3, (float) 0.00, (float) 1.5);
     pid_init(&pid_Line_Theta, (float) 0.01, (float) 0.00, (float) 0.5);
     while (0) {
 
@@ -106,7 +108,6 @@ void MotorHandle(void)
 {
     static uint8_t location_timer;
     static uint8_t Angle_timer;
-    static int32_t MotorOffset[MSum];
     uint16_t Motor_Speed[MSum];
     /** 当前时刻总计数值 = 计数器值 + 计数溢出次数 * ENCODER_TIM_PERIOD  */
     Motor[MLeft].Count = __HAL_TIM_GET_COUNTER(&MLeftEncoder_TIM) + (Motor_Encoder[MLeft].Period * 65535);
@@ -185,12 +186,41 @@ void EncoderHandle(Motor_TypeDef Motor_N, _Bool Flag)
         Motor_Encoder[Motor_N].Period++;
 }
 
-void TTS_MotorSetMove(int32_t L,int32_t R)
+void TTS_MotorSetMove(int32_t L, int32_t R)
 {
     Motor[MLeft].TargetValue += L;
     Motor[MRight].TargetValue += R;
 }
 
+void TTS_MotorSetStop(void)
+{
+    Motor[MLeft].TargetValue =
+        (int32_t) ((Motor[MLeft].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0) + 105;
+    Motor[MRight].TargetValue =
+        (int32_t) ((Motor[MRight].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0) + 105;
+}
+
+void TTS_MotorSetZero(void)
+{
+    if (Motor[MLeft].TargetValue
+        == (int32_t) (((Motor[MLeft].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0)) &&
+        Motor[MRight].TargetValue
+            == (int32_t) (((Motor[MRight].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0))
+        ) {
+        Motor[MLeft].TargetValue = 0;
+        Motor[MRight].TargetValue = 0;
+        MotorOffset[MLeft] = 0;
+        Motor_Encoder[MLeft].Period = 0;
+        Motor[MLeft].Actual_Speed = 0;
+        Motor[MLeft].Count = 0;
+        __HAL_TIM_SET_COUNTER(&MLeftEncoder_TIM, 0);
+        MotorOffset[MRight] = 0;
+        Motor_Encoder[MRight].Period = 0;
+        Motor[MRight].Actual_Speed = 0;
+        Motor[MRight].Count = 0;
+        __HAL_TIM_SET_COUNTER(&MRightEncoder_TIM, 0);
+    }
+}
 
 void MotorSpeed(uint8_t ID, uint16_t Speed)
 {

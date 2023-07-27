@@ -71,7 +71,7 @@ void User_Create_task(void)
         Error_Handler();
     if (TTS_TaskCreation(OS_TASK_Queue, Queue_Proc, 5, OS_Pause) != OS_Pause)
         Error_Handler();
-    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 200, OS_Pause) != OS_Pause)
+    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 150, OS_RUN) != OS_RUN)
         Error_Handler();
     if (TTS_TimerCreation(OS_Timer_Time, Time_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
@@ -101,9 +101,10 @@ void User_Bsp_Init(void)
     TTS_TimerInit(OS_Timer, OS_Timer_SUM);
     HAL_TIM_Base_Start_IT(&User_Timer_Tim);
     /* MPU Init */
-    while (MPU_Init());                    //初始化MPU6050
-//    MotorCore.Status = Motor_Location_Angle;
-    MotorCore.Status = Motor_Location_line;
+    while (MPU_Init())//初始化MPU6050
+        Delay_ms(10);
+    MotorCore.Task.Set = MotorTaskCrossroad;
+    MotorCore.Task.Line_Status= Motor_LineStop;
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

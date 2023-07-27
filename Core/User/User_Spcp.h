@@ -15,18 +15,21 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
         MotorCore.Line.Status = (MotorLine_t) Data[0];
         MotorCore.Line.Offset = (int8_t) Data[1];
         MotorCore.Line.Angle = (int8_t) Data[2];
-        if (10 == Timer++) {
-            Timer = 0;
-//            char CBuff[50];
-//            sprintf(CBuff, "{B%d:%d:}$", (int8_t) MotorCore.Line.Offset, (int8_t) MotorCore.Line.Angle);
-//            TTSQueue_SendByte_(ATTask_Debug, CBuff);
-//            printf(" %d,%d\n", MotorCore.LineOffset, MotorCore.LineAngle);
+        if (MotorCore.Line.Status == MotorCore.Task.Line_Status) {
+            //            if (2 == Timer++) {
+//                Timer = 0;
+            MotorCore.Task.Line_Status = Motor_LineNLL;
+            TTS_MotorSetStop();
+//            }
+//            else
+//                Timer = 0;
         }
+
     }
     else if (ATTask_Debug == ID) {
         if (Length == 1) {
             if (*Data == 'Z') {
-
+                TTS_MotorSetStop();
 //            Motor[MLeft].TargetValue=Motor_CurrentPosition(MLeft);
 //            Motor[MRight].TargetValue=Motor_CurrentPosition(MRight);
             }

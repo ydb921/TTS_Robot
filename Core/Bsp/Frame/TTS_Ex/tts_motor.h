@@ -35,14 +35,15 @@ typedef enum
 
 typedef enum
 {
-    Motor_Stop = 0U,
+    Motor_LineStop = 0U,
     Motor_Beeline,  //直线
     MotorCrossroad, //十字路口
     Motor_T_line,        //前边T型路口
     Motor_T_Left,        //左边T型路口
     Motor_T_Right,        //右边T型路口
     Motor_Left,     //左转
-    Motor_Right     //右转
+    Motor_Right ,    //右转
+    Motor_LineNLL
 } MotorLine_t;
 
 typedef enum
@@ -55,7 +56,7 @@ typedef enum
     MotorTask_T_Right,        //右边T型路口
     MotorTask_Left,     //左转
     MotorTask_Right     //右转
-} MotorTask_t;
+} MotorSetTask_t;
 
 typedef struct
 {
@@ -89,6 +90,12 @@ typedef struct
 
 typedef struct
 {
+    MotorSetTask_t Set;
+    MotorLine_t Line_Status;
+} MotorTask_t;
+
+typedef struct
+{
     LineWalking_t Line;
     MotorAngle_t Angle;         //目标角度
     MotorAngle_t Actual_Angle;  //当前角度
@@ -113,5 +120,6 @@ void TTS_MotorSetMove(int32_t L, int32_t R);
 void TTS_MotorMove(uint8_t ID, uint16_t Speed);
 /** Feedback **/
 void TTS_MotorFeedback_Config(MotorFeedback_t *User_Feedback);
-
+void TTS_MotorSetStop(void);
+void TTS_MotorSetZero(void);
 #endif/*_TTS_MOTOR_H*/
