@@ -1,0 +1,3 @@
+D:/Project/20230725_diansai/TTS_Robot/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir
+D:/Project/20230725_diansai/TTS_Robot/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Project/20230725_diansai/TTS_Robot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
