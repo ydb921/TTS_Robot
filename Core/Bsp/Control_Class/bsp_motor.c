@@ -16,6 +16,8 @@ static _pid pid_Angle;
 
 static _pid pid_Line;
 
+static _pid pid_Line_Theta;
+
 void Motor_Init(MotorControl_t *User_Motor)
 {
     /** TTS Motor Control Init **/
@@ -49,7 +51,8 @@ void Motor_Init(MotorControl_t *User_Motor)
     pid_init(&pid_location[MLeft], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_location[MRight], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_Angle, (float) 0.0025, (float) 0.00, (float) 0.04);
-    pid_init(&pid_Line, (float) 0.25, (float) 0.00, (float) 3);
+    pid_init(&pid_Line, (float) 0.3, (float) 0.00, (float)1.5);
+    pid_init(&pid_Line_Theta, (float) 0.01, (float) 0.00, (float) 0.5);
     while (0) {
 
     }
@@ -118,18 +121,18 @@ void MotorHandle(void)
                     break;
                 }
                 case Motor_Location_line: {
-                    if (MotorCore.LineAngle <= 15 || (MotorCore.LineOffset >= 15 || MotorCore.LineOffset <= -15))
-                        break;
-                    MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.LineOffset),
-                                                 pid_NULL);
-                    if (MotorGetOffset > 6) {
-                        MotorGetOffset = 6;
+                    if (MotorCore.Line.Status == Motor_Beeline) {
+                        MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL) +
+                            pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Angle), pid_NULL);
+//                        if (MotorGetOffset > 6) {
+//                            MotorGetOffset = 6;
+//                        }
+//                        else if (MotorGetOffset < -6) {
+//                            MotorGetOffset = -6;
+//                        }
+                        MotorOffset[MLeft] -= MotorGetOffset;
+                        MotorOffset[MRight] += MotorGetOffset;
                     }
-                    else if (MotorGetOffset < -6) {
-                        MotorGetOffset = -6;
-                    }
-                    MotorOffset[MLeft] -= MotorGetOffset;
-                    MotorOffset[MRight] += MotorGetOffset;
                     break;
                 }
                 case Motor_Location_Angle: {
@@ -181,6 +184,13 @@ void EncoderHandle(Motor_TypeDef Motor_N, _Bool Flag)
     else
         Motor_Encoder[Motor_N].Period++;
 }
+
+void TTS_MotorSetMove(int32_t L,int32_t R)
+{
+    Motor[MLeft].TargetValue += L;
+    Motor[MRight].TargetValue += R;
+}
+
 
 void MotorSpeed(uint8_t ID, uint16_t Speed)
 {

@@ -29,9 +29,33 @@ typedef enum
 typedef enum
 {
     Motor_Location = 0U,
-    Motor_Location_line,
-    Motor_Location_Angle,
+    Motor_Location_line,//巡线
+    Motor_Location_Angle,//定向移动
 } MotorStatus_t;
+
+typedef enum
+{
+    Motor_Stop = 0U,
+    Motor_Beeline,  //直线
+    MotorCrossroad, //十字路口
+    Motor_T_line,        //前边T型路口
+    Motor_T_Left,        //左边T型路口
+    Motor_T_Right,        //右边T型路口
+    Motor_Left,     //左转
+    Motor_Right     //右转
+} MotorLine_t;
+
+typedef enum
+{
+    MotorTask_Stop = 0U,
+    MotorTask_Beeline,  //直线
+    MotorTaskCrossroad, //十字路口
+    MotorTask_T_line,        //前边T型路口
+    MotorTask_T_Left,        //左边T型路口
+    MotorTask_T_Right,        //右边T型路口
+    MotorTask_Left,     //左转
+    MotorTask_Right     //右转
+} MotorTask_t;
 
 typedef struct
 {
@@ -58,11 +82,18 @@ typedef struct
 
 typedef struct
 {
-    int8_t LineOffset;
-    int8_t LineAngle;
+    MotorLine_t Status;
+    int8_t Offset;
+    int8_t Angle;
+} LineWalking_t;
+
+typedef struct
+{
+    LineWalking_t Line;
     MotorAngle_t Angle;         //目标角度
     MotorAngle_t Actual_Angle;  //当前角度
     MotorStatus_t Status;       //状态
+    MotorTask_t Task;
     _Bool Flag;       //标志
 } MotorCore_t;
 
@@ -78,7 +109,7 @@ typedef void (*TTS_MotorStop_t)(uint8_t ID);
 void TTS_Motor_Config(MotorControl_t *User_Motor, uint16_t Speed, uint8_t Sum);
 
 void TTS_Motor_BspControlConfig(TTS_MotorStart_t Start, TTS_MotorStop_t Stop, TTS_MotorSpeed_t Speed);
-
+void TTS_MotorSetMove(int32_t L, int32_t R);
 void TTS_MotorMove(uint8_t ID, uint16_t Speed);
 /** Feedback **/
 void TTS_MotorFeedback_Config(MotorFeedback_t *User_Feedback);

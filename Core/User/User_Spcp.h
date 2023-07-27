@@ -12,19 +12,21 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
     }
     else if (LineTask_Debug == ID) {
         static uint8_t Timer = 0;
-        MotorCore.LineOffset = (int8_t) Data[0];
-        MotorCore.LineAngle = (int8_t) Data[1];
+        MotorCore.Line.Status = (MotorLine_t) Data[0];
+        MotorCore.Line.Offset = (int8_t) Data[1];
+        MotorCore.Line.Angle = (int8_t) Data[2];
         if (10 == Timer++) {
             Timer = 0;
-            char CBuff[50];
-            sprintf(CBuff, "{B%d:%d:}$", (int8_t) MotorCore.LineOffset, (int8_t) MotorCore.LineAngle);
-            TTSQueue_SendByte_(ATTask_Debug, CBuff);
+//            char CBuff[50];
+//            sprintf(CBuff, "{B%d:%d:}$", (int8_t) MotorCore.Line.Offset, (int8_t) MotorCore.Line.Angle);
+//            TTSQueue_SendByte_(ATTask_Debug, CBuff);
 //            printf(" %d,%d\n", MotorCore.LineOffset, MotorCore.LineAngle);
         }
     }
     else if (ATTask_Debug == ID) {
         if (Length == 1) {
             if (*Data == 'Z') {
+
 //            Motor[MLeft].TargetValue=Motor_CurrentPosition(MLeft);
 //            Motor[MRight].TargetValue=Motor_CurrentPosition(MRight);
             }
@@ -39,14 +41,28 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
                 Motor[MRight].TargetValue -= 45;
             }
             else if (*Data == 'G') {
-//                Motor[MLeft].TargetValue += 45;
-//                Motor[MRight].TargetValue -= 45;
-                MotorCore.Angle.Y = 9000;
+                switch (MotorCore.Status) {
+
+                    case Motor_Location:
+                    case Motor_Location_line:Motor[MLeft].TargetValue += 45;
+                        Motor[MRight].TargetValue -= 45;
+                        break;
+                    case Motor_Location_Angle:MotorCore.Angle.Y = 9000;
+                        break;
+                }
+
             }
             else if (*Data == 'C') {
-                MotorCore.Angle.Y = -9000;
-//                Motor[MLeft].TargetValue -= 45;
-//                Motor[MRight].TargetValue += 45;
+                switch (MotorCore.Status) {
+
+                    case Motor_Location:
+                    case Motor_Location_line:Motor[MLeft].TargetValue -= 45;
+                        Motor[MRight].TargetValue += 45;
+                        break;
+                    case Motor_Location_Angle:MotorCore.Angle.Y = -9000;
+                        break;
+                }
+
             }
         }
     }

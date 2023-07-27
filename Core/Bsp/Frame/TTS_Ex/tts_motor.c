@@ -7,7 +7,6 @@ static TTS_MotorSpeed_t MotorSpeed;
 static TTS_MotorStart_t MotorStart;
 
 static TTS_MotorStop_t MotorStop;
-
 void TTS_MotorMove(uint8_t ID, uint16_t Speed)
 {
     switch (Motor[ID].State) {

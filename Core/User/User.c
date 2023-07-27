@@ -23,12 +23,15 @@ void UserProc(void)
         MotorCore.Actual_Angle.X = (int16_t) (pitch * 100);
         MotorCore.Actual_Angle.Y = (int16_t) (yaw * 100);
         MotorCore.Actual_Angle.Z = (int16_t) (roll * 100);
-        MotorCore.Actual_Angle.Y = MotorCore.Actual_Angle.Y - 0.001 * mpu_count- 0.49;
+        MotorCore.Actual_Angle.Y = MotorCore.Actual_Angle.Y - 0.001 * mpu_count - 0.49;
 //                temp = MPU_Get_Temperature();                                //得到温度值
 //                MPU_Get_Accelerometer(&aacx, &aacy, &aacz);    //得到加速度传感器数据
 //                MPU_Get_Gyroscope(&gyrox, &gyroy, &gyroz);    //得到陀螺仪数据
 //        sprintf(arr_AT, "{A%d:%d:%d:%d}$", MotorCore.LineOffset, MotorCore.LineAngle, 0, (int16_t) yaw);
-        sprintf(arr_AT, "{A%d:%d:%d:%d}$", MotorCore.LineOffset, MotorCore.LineAngle, 0, MotorCore.Actual_Angle.Y);
+        sprintf(arr_AT,
+                "{A%d:%d:%d:%d}$",
+                MotorCore.Line.Offset, MotorCore.Line.Angle,
+                MotorCore.Line.Status, MotorCore.Actual_Angle.Y);
         TTSQueue_SendByte_(ATTask_Debug, arr_AT);
 //                printf("三轴角度：%.2f  %.2f  %.2f\r\n", pitch, roll, yaw);
 //        printf("三轴加速度：%d-%d-%d\r\n",aacx,aacy,aacz);
@@ -54,7 +57,7 @@ static void Time_Proc(void)
 
 static void MPU_Proc(void)
 {
-    if(++mpu_count == 6000)mpu_count = 0;
+    if (++mpu_count == 6000)mpu_count = 0;
 }
 
 void User_Create_task(void)
@@ -67,6 +70,8 @@ void User_Create_task(void)
     if (TTS_TaskCreation(OS_TASK_Proc, UserProc, 10, OS_RUN) != OS_RUN)
         Error_Handler();
     if (TTS_TaskCreation(OS_TASK_Queue, Queue_Proc, 5, OS_Pause) != OS_Pause)
+        Error_Handler();
+    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 200, OS_Pause) != OS_Pause)
         Error_Handler();
     if (TTS_TimerCreation(OS_Timer_Time, Time_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();

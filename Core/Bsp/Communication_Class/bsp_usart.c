@@ -74,7 +74,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
     else if (huart == &Line_UARTx) {
 //        QueueDataIn(USART_Queue[LineTask_Debug].Rx_Data, UART_ToIdleDataBuff[LineTask_Debug], Size);
         if (UART_ToIdleDataBuff[LineTask_Debug][0] == 0x7e &&
-            UART_ToIdleDataBuff[LineTask_Debug][3] == 0xfe && Size >= 3) {
+            UART_ToIdleDataBuff[LineTask_Debug][4] == 0xfe && Size >= 4) {
             Spcp_Callback(LineTask_Debug, &UART_ToIdleDataBuff[LineTask_Debug][1], 2,
                           &UART_ToIdleDataBuff[LineTask_Debug][3]);
         }

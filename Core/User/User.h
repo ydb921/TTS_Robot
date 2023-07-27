@@ -18,6 +18,7 @@ typedef enum
     OS_TASK_Queue,
     OS_TASK_Button,
     OS_TASK_Proc,
+    OS_TASK_Control,
     OS_TASK_SUM,
 } OS_TaskID_t;
 

@@ -20,7 +20,28 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a7769e-ede9-41c8-848c-7cbef6e3ac62" name="更改" comment="" />
+    <list default="true" id="a1a7769e-ede9-41c8-848c-7cbef6e3ac62" name="更改" comment="摄像头巡线+陀螺仪方向矫正+多级串级PID">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Bsp/Communication_Class/bsp_usart.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Communication_Class/bsp_usart.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Bsp/Frame/TTS_Ex/tts_motor.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Frame/TTS_Ex/tts_motor.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Bsp/Frame/TTS_Ex/tts_motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Frame/TTS_Ex/tts_motor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User_Control.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User_Control.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User_Spcp.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User_Spcp.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Communication_Class/bsp_usart.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Communication_Class/bsp_usart.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_motor.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_motor.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Frame/TTS_Ex/tts_motor.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Frame/TTS_Ex/tts_motor.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/main.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/User/User.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/User/User.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.elf" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.elf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.hex" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.hex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.map" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.map" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,33 +64,39 @@
     </option>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2023" />
     <option name="minorVersion" value="1.5" />
   </component>
   <component name="ProjectId" id="2T3mcmbkVLXtoJ6N6UqrFlxXLtr" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Project/20230725_diansai/TTS_Robot&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "V_FMT": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Project/20230725_diansai/TTS_Robot",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Project\20230725_diansai\TTS_Robot\Core\Bsp\Control_Class" />
@@ -105,8 +132,17 @@
       <workItem from="1690331283903" duration="158000" />
       <workItem from="1690331560479" duration="7009000" />
       <workItem from="1690350098625" duration="26995000" />
-      <workItem from="1690416858086" duration="11014000" />
+      <workItem from="1690416858086" duration="22248000" />
     </task>
+    <task id="LOCAL-00001" summary="摄像头巡线+陀螺仪方向矫正+多级串级PID">
+      <option name="closed" value="true" />
+      <created>1690435589753</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1690435589753</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,5 +157,16 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticFoundErrors value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="摄像头巡线+陀螺仪方向矫正+多级串级PID" />
+    <option name="LAST_COMMIT_MESSAGE" value="摄像头巡线+陀螺仪方向矫正+多级串级PID" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="com.jetbrains.cidr.embedded.openocd.conf.type">
+        <watch expression="MotorCore.Line.Status" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
