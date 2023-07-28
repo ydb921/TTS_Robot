@@ -15,6 +15,8 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
         MotorCore.Line.Status = (MotorLine_t) Data[0];
         MotorCore.Line.Offset = (int8_t) Data[1];
         MotorCore.Line.Angle = (int8_t) Data[2];
+        if (MotorCore.Status != Motor_Location_line)
+            return;
         if (MotorCore.Line.Status == MotorCore.Task.Line_Status) {
             Line_Flag = ENABLE;
         }
@@ -48,7 +50,7 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
                     case Motor_Location_line:Motor[MLeft].TargetValue += 45;
                         Motor[MRight].TargetValue -= 45;
                         break;
-                    case Motor_Location_Angle:MotorCore.Angle.Y = 9000;
+                    case Motor_Location_Angle:MotorCore.Angle.Y = 90;
                         break;
                 }
 
@@ -60,7 +62,7 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
                     case Motor_Location_line:Motor[MLeft].TargetValue -= 45;
                         Motor[MRight].TargetValue += 45;
                         break;
-                    case Motor_Location_Angle:MotorCore.Angle.Y = -9000;
+                    case Motor_Location_Angle:MotorCore.Angle.Y = -90;
                         break;
                 }
 

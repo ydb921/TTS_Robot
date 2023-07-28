@@ -20,9 +20,9 @@ void UserProc(void)
 {
     char arr_AT[30];
     if (MotorCore.Flag && mpu_dmp_get_data(&pitch, &roll, &yaw) == 0) {
-        MotorCore.Actual_Angle.X = (int16_t) (pitch * 100);
-        MotorCore.Actual_Angle.Y = (int16_t) (yaw * 100);
-        MotorCore.Actual_Angle.Z = (int16_t) (roll * 100);
+        MotorCore.Actual_Angle.X = (pitch);
+        MotorCore.Actual_Angle.Y = (yaw);
+        MotorCore.Actual_Angle.Z = (roll);
         MotorCore.Actual_Angle.Y = MotorCore.Actual_Angle.Y - 0.001 * mpu_count - 0.49;
 //                temp = MPU_Get_Temperature();                                //得到温度值
 //                MPU_Get_Accelerometer(&aacx, &aacy, &aacz);    //得到加速度传感器数据
@@ -31,7 +31,7 @@ void UserProc(void)
         sprintf(arr_AT,
                 "{A%d:%d:%d:%d}$",
                 MotorCore.Line.Offset, MotorCore.Line.Angle,
-                MotorCore.Line.Status, MotorCore.Actual_Angle.Y);
+                MotorCore.Line.Status, (int16_t) (MotorCore.Actual_Angle.Y * 10));
         TTSQueue_SendByte_(ATTask_Debug, arr_AT);
 //                printf("三轴角度：%.2f  %.2f  %.2f\r\n", pitch, roll, yaw);
 //        printf("三轴加速度：%d-%d-%d\r\n",aacx,aacy,aacz);
@@ -71,11 +71,11 @@ void User_Create_task(void)
         Error_Handler();
     if (TTS_TaskCreation(OS_TASK_Queue, Queue_Proc, 5, OS_Pause) != OS_Pause)
         Error_Handler();
-    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 500, OS_RUN) != OS_RUN)
+    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 200, OS_RUN) != OS_RUN)
         Error_Handler();
     if (TTS_TimerCreation(OS_Timer_Time, Time_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
-    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 10, TTS_Timer_START) != TTS_Timer_START)
+    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
     if (TTS_TimerCreation(OS_Motor_Clock, MotorHandle, 10, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
@@ -105,6 +105,7 @@ void User_Bsp_Init(void)
         Delay_ms(10);
     MotorCore.Task.Set = MotorTaskCrossroad;
     MotorCore.Task.Line_Status = MotorCrossroad;
+
 //    MotorCore.Task.Line_Status= Motor_LineStop;
 
 }
