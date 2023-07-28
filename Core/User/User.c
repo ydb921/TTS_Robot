@@ -31,7 +31,7 @@ void UserProc(void)
         sprintf(arr_AT,
                 "{A%d:%d:%d:%d}$",
                 MotorCore.Line.Offset, MotorCore.Line.Angle,
-                MotorCore.Line.Status, (int16_t) (MotorCore.Actual_Angle.Y * 10));
+                MotorCore.Line.Status, (int16_t) (MotorCore.Actual_Angle.Y));
         TTSQueue_SendByte_(ATTask_Debug, arr_AT);
 //                printf("三轴角度：%.2f  %.2f  %.2f\r\n", pitch, roll, yaw);
 //        printf("三轴加速度：%d-%d-%d\r\n",aacx,aacy,aacz);
@@ -71,15 +71,18 @@ void User_Create_task(void)
         Error_Handler();
     if (TTS_TaskCreation(OS_TASK_Queue, Queue_Proc, 5, OS_Pause) != OS_Pause)
         Error_Handler();
-    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 200, OS_RUN) != OS_RUN)
+    if (TTS_TaskCreation(OS_TASK_Control, Control_Proc, 300, OS_RUN) != OS_RUN)
         Error_Handler();
     if (TTS_TimerCreation(OS_Timer_Time, Time_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
-    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
+    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 1000, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
     if (TTS_TimerCreation(OS_Motor_Clock, MotorHandle, 10, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
     TTS_SetStatus(OS_TASK_Queue, OS_RUN);
+    MotorCore.Task.Set = MotorTaskCrossroad;
+//    MotorCoreSetStatus(Motor_Location_line);
+//    TTS_MotorSetMove(Default_SPEED, Default_SPEED);
 }
 
 void User_Bsp_Init(void)
@@ -102,12 +105,7 @@ void User_Bsp_Init(void)
     HAL_TIM_Base_Start_IT(&User_Timer_Tim);
     /* MPU Init */
     while (MPU_Init())//初始化MPU6050
-        Delay_ms(10);
-    MotorCore.Task.Set = MotorTaskCrossroad;
-    MotorCore.Task.Line_Status = MotorCrossroad;
-
-//    MotorCore.Task.Line_Status= Motor_LineStop;
-
+        Delay_ms(50);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

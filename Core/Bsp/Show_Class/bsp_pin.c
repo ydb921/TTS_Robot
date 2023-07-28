@@ -1,6 +1,6 @@
 #include "bsp_pin.h"
 
-static TTS_Pin_TypeDef User_Pin[Pin_SUM];
+ TTS_Pin_TypeDef User_Pin[Pin_SUM];
 
 Pin_Type Led_Dark[] = {500, 500, TTS_PinEND};
 

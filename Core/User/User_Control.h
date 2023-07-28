@@ -26,33 +26,107 @@ void Control_Proc(void)
 //                if (MotorCoreSetStatus(Motor_Location_Angle)) {
 //                    MotorCore.Task.Line_Status = Motor_LineNLL;
 //                    MotorCore.Task.Set = MotorTask_T_line;
-                if (MotorCore.Angle.Y != -90)
-                    TTS_MotorSetMove(25, 25);
 
-                    MotorCore.Angle.Y = -90;
 //                }
                 break;
             case MotorTask_Beeline:break;
             case MotorTaskCrossroad: {
                 if (MotorCore.Task.Line_Status == Motor_LineNLL) {
                     if (MotorCoreSetStatus(Motor_Location_Angle)) {
-                        MotorCore.Task.Set = MotorTask_Stop;
+                        MotorCore.Task.Set = MotorTask_Left;
                     }
                 }
+
                 else if (Motor_Location_line != MotorCore.Status) {
                     if (MotorCoreSetStatus(Motor_Location_line)) {
-                        TTS_MotorSetMove(80, 80);
+                        MotorCore.Task.Line_Status = MotorCrossroad;
+                        TTS_MotorSetMove(Default_SPEED, Default_SPEED
+                        );
                     }
                 }
                 break;
             }
             case MotorTask_T_line: {
+                if (MotorCore.Task.Line_Status == Motor_LineNLL) {
+                    if (MotorCoreSetStatus(Motor_Location_Angle)) {
+                        MotorCore.Task.Set = MotorTask_Move;
+                    }
+                }
+                else if (Motor_Location_line != MotorCore.Status) {
+                    if (MotorCoreSetStatus(Motor_Location_line)) {
+                        MotorCore.Task.Line_Status = Motor_LineStop;
+                        TTS_MotorSetMove(Default_SPEED, Default_SPEED);
+                    }
+                }
+                break;
+            }
+            case MotorTask_Move: {
+                TTS_MotorSetMove(210, 210);
+//                while (1);
+                MotorCore.Task.Set = MotorTask_Rotation;
+                break;
+            }
+
+            case MotorTask_Rotation: {
+                if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0) {
+                    if (MotorCore.Angle.Y == -90)
+                        MotorCore.Angle.Y = 90;
+                    else {
+                        MotorCore.Angle.Y = -90;
+                    }
+                    MotorCore.Task.Set = MotorTask_WaitToZero;
+                }
+                break;
+            }
+            case MotorTask_WaitToZero: {
+                if (MotorCore.Angle.Y == -90 || MotorCore.Angle.Y == 90) {
+                    if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0) {
+                        TTS_MotorSetMove(210, 210);
+                        MotorCore.Task.Set = MotorTask_WaitToZero1;
+                    }
+                }
+//                while (1);
 
                 break;
             }
-            case MotorTask_T_Left:break;
-            case MotorTask_T_Right:break;
-            case MotorTask_Left:break;
-            case MotorTask_Right:break;
+            case MotorTask_WaitToZero1: {
+//                if (MotorCore.Task.Line_Status == Motor_LineNLL) {
+//                    if (MotorCoreSetStatus(Motor_Location_Angle)) {
+//                        MotorCore.Task.Set = MotorTask_Move;
+//                    }
+//                }
+//                else if (Motor_Location_line != MotorCore.Status) {
+//                    if (MotorCoreSetStatus(Motor_Location_line)) {
+//                        MotorCore.Task.Line_Status = MotorCrossroad;
+//                        TTS_MotorSetMove(Default_SPEED, Default_SPEED);
+//                    }
+//                }
+                break;
+            }
+            case MotorTask_T_Left: { break; }
+            case MotorTask_T_Right: {
+                break;
+            }
+            case MotorTask_Left: {
+                if (MotorCore.Angle.Y != 90)
+                    TTS_MotorSetMove(25, 25);
+                else if (abs(MotorCore.Angle.Y - MotorCore.Actual_Angle.Y) <= 1.0) {
+                    MotorCore.Task.Set = MotorTask_T_line;
+                }
+                if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0)
+                    MotorCore.Angle.Y = 90;
+                break;
+            }
+            case MotorTask_Right: {
+                if (MotorCore.Angle.Y != -90)
+                    TTS_MotorSetMove(25, 25);
+                else if (abs(MotorCore.Angle.Y - MotorCore.Actual_Angle.Y) <= 1.0) {
+                    MotorCore.Task.Set = MotorTask_T_line;
+                }
+                if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0)
+                    MotorCore.Angle.Y = -90;
+                break;
+            }
+
         }
 }

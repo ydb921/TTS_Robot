@@ -53,8 +53,8 @@ void Motor_Init(MotorControl_t *User_Motor)
     pid_init(&pid_speed[MRight], (float) 2, (float) 0.4, (float) 3);
     pid_init(&pid_location[MLeft], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_location[MRight], (float) 0.158, (float) 0.0002, (float) 0);
-    pid_init(&pid_Angle, (float) 0.2, (float) 0.00, (float) 1);
-    pid_init(&pid_Line, (float) 0.8, (float) 0.00, (float) 0.00);
+    pid_init(&pid_Angle, (float) 0.40, (float) 0.00, (float)6.2);
+    pid_init(&pid_Line, (float) 0.8, (float) 0.00, (float) 0.0001);
     pid_init(&pid_Line_Theta, (float) 0.4, (float) 0.00, (float) 0.0);
     while (0) {
 
@@ -118,13 +118,13 @@ void MotorHandle(void)
             (int32_t) ((Motor[MRight].Count * 210.0 / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO));
         switch (MotorCore.Status) {
             case Motor_Location_Angle: {
-                float error = 0;
-                error = MotorCore.Angle.Y - MotorCore.Actual_Angle.Y;
+                float error = MotorCore.Angle.Y - MotorCore.Actual_Angle.Y;
                 // 处理角度突变
                 if (error > 180.0f)
                     error -= 360.0f;
                 else if (error < -180.0f)
                     error += 360.0f;
+
                 MotorGetOffset = pid_realize(&pid_Angle, error,
                                              pid_NULL);
                 MotorOffset[MLeft] += MotorGetOffset;
@@ -161,7 +161,7 @@ void MotorHandle(void)
                 break;
             }
             case Motor_Location_line: {
-                if (MotorCore.Line.Status == Motor_Beeline || MotorCore.Line.Angle > 13) {
+                if (MotorCore.Line.Status == Motor_Beeline || MotorCore.Line.Angle > 11) {
                     MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL) +
                         pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Offset), pid_NULL);
                 }
@@ -233,6 +233,7 @@ _Bool MotorCoreSetStatus(MotorStatus_t Status)
 {
     if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0) {
         MotorCore.Status = Status;
+        MotorCore.Task.Line_Status = Motor_LineStop;
 //        TTS_MotorSetZero();
         TTS_MotorSetStop();
         switch (Status) {
@@ -257,8 +258,8 @@ void TTS_MotorSetStop(void)
 {
     switch (MotorCore.Status) {
         case Motor_Location: {
-//            Motor[MLeft].TargetValue = Motor[MLeft].Actual_Target;
-//            Motor[MRight].TargetValue = Motor[MRight].Actual_Target;
+            Motor[MLeft].TargetValue = Motor[MLeft].Actual_Target;
+            Motor[MRight].TargetValue = Motor[MRight].Actual_Target;
             break;
         }
         case Motor_Location_line: {
@@ -267,6 +268,8 @@ void TTS_MotorSetStop(void)
             break;
         }
         case Motor_Location_Angle: {
+            MotorOffset[MLeft] = 0;
+            MotorOffset[MRight] = 0;
             Motor[MLeft].TargetValue = Motor[MLeft].Actual_Target;
             Motor[MRight].TargetValue = Motor[MRight].Actual_Target;
             break;

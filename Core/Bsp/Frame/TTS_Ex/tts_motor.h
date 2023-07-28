@@ -55,6 +55,10 @@ typedef enum
     MotorTask_T_line,        //前边T型路口
     MotorTask_T_Left,        //左边T型路口
     MotorTask_T_Right,        //右边T型路口
+    MotorTask_Rotation,     //回转
+    MotorTask_Move,     //回转
+    MotorTask_WaitToZero,
+    MotorTask_WaitToZero1,
     MotorTask_Left,     //左转
     MotorTask_Right     //右转
 } MotorSetTask_t;

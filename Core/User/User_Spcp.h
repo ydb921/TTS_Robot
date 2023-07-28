@@ -18,7 +18,14 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
         if (MotorCore.Status != Motor_Location_line)
             return;
         if (MotorCore.Line.Status == MotorCore.Task.Line_Status) {
-            Line_Flag = ENABLE;
+            if (MotorCore.Line.Status == Motor_LineStop) {
+                Line_Flag = DISABLE;
+                MotorCore.Task.Line_Status = Motor_LineNLL;
+                TTS_MotorSetStop();
+            }
+            else {
+                Line_Flag = ENABLE;
+            }
         }
         else if (Line_Flag == ENABLE) {
             Line_Flag = DISABLE;
@@ -57,7 +64,6 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
             }
             else if (*Data == 'C') {
                 switch (MotorCore.Status) {
-
                     case Motor_Location:
                     case Motor_Location_line:Motor[MLeft].TargetValue -= 45;
                         Motor[MRight].TargetValue += 45;
@@ -66,6 +72,16 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
                         break;
                 }
 
+            }
+
+            else if (*Data == 'm') {
+                MotorCore.Angle.Y = -90;
+            }
+            else if (*Data == 'o') {
+                MotorCore.Angle.Y = 0;
+            }
+            else if (*Data == 'n') {
+                MotorCore.Angle.Y = 90;
             }
         }
     }
