@@ -8,8 +8,8 @@
 #define MRight_TIM htim1
 #define MRightEncoder_TIM htim3
 #define MLeftEncoder_TIM htim4
-#define TARGET_PWM_MAX    300
-#define TARGET_SPEED_MAX    100    // 目标速度的最大值 r/m
+#define TARGET_PWM_MAX    400
+#define TARGET_SPEED_MAX    150    // 目标速度的最大值 r/m
 
 /* 减速电机减速比 */
 #define REDUCTION_RATIO                        21.3

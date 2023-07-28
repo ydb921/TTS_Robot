@@ -11,20 +11,18 @@ void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t 
         printf("id: %d ,Data: %s ,Length: %d FrameData: %x \n", ID, Data, Length, *FrameData);
     }
     else if (LineTask_Debug == ID) {
-        static uint8_t Timer = 0;
+        static _Bool Line_Flag = DISABLE;
         MotorCore.Line.Status = (MotorLine_t) Data[0];
         MotorCore.Line.Offset = (int8_t) Data[1];
         MotorCore.Line.Angle = (int8_t) Data[2];
         if (MotorCore.Line.Status == MotorCore.Task.Line_Status) {
-            //            if (2 == Timer++) {
-//                Timer = 0;
+            Line_Flag = ENABLE;
+        }
+        else if (Line_Flag == ENABLE) {
+            Line_Flag = DISABLE;
             MotorCore.Task.Line_Status = Motor_LineNLL;
             TTS_MotorSetStop();
-//            }
-//            else
-//                Timer = 0;
         }
-
     }
     else if (ATTask_Debug == ID) {
         if (Length == 1) {

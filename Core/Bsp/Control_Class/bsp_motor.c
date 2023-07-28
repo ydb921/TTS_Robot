@@ -28,6 +28,7 @@ void Motor_Init(MotorControl_t *User_Motor)
     /** Encoder **/
     TTS_MotorFeedback_Config(&Motor_Encoder[MLeft]);
     TTS_MotorFeedback_Config(&Motor_Encoder[MRight]);
+
     __HAL_TIM_CLEAR_IT(&MLeftEncoder_TIM, TIM_IT_UPDATE);//未找到对应函数
     if (HAL_TIM_Base_Start_IT(&MLeftEncoder_TIM) != HAL_OK)
         Error_Handler();
@@ -53,8 +54,8 @@ void Motor_Init(MotorControl_t *User_Motor)
     pid_init(&pid_location[MLeft], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_location[MRight], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_Angle, (float) 0.0025, (float) 0.00, (float) 0.04);
-    pid_init(&pid_Line, (float) 0.3, (float) 0.00, (float) 1.5);
-    pid_init(&pid_Line_Theta, (float) 0.01, (float) 0.00, (float) 0.5);
+    pid_init(&pid_Line, (float) 0.8, (float) 0.00, (float) 0.00);
+    pid_init(&pid_Line_Theta, (float) 0.4, (float) 0.00, (float) 0.0);
     while (0) {
 
     }
@@ -63,15 +64,13 @@ void Motor_Init(MotorControl_t *User_Motor)
 float Motor_SpeedControl(MotorControl_t *UserMotor, Motor_TypeDef Motor_N)
 {
     /** 上一时刻总计数值 */
-    static __IO int32_t Last_Count[MSum] = {0, 0};
-
 //    if (UserMotor[Motor_N].State != Motor_Shutoff) {
     /** 转轴转速 = 单位时间内的计数值 / 编码器总分辨率 * 时间系数  */
-    UserMotor[Motor_N].Actual_Speed = (int32_t) (((float) (Motor[Motor_N].Count - Last_Count[Motor_N]) /
+    UserMotor[Motor_N].Actual_Speed = (int32_t) (((float) (Motor[Motor_N].Count - Motor[Motor_N].Last_Count) /
         ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) / (10 / 1000.0 / 60.0));
 
     /** 记录当前总计数值，供下一时刻计算使用 */
-    Last_Count[Motor_N] = Motor[Motor_N].Count;
+    Motor[Motor_N].Last_Count = Motor[Motor_N].Count;
     /**  PID 计算  */
     float cont_val = pid_realize(&pid_speed[Motor_N], (float) UserMotor[Motor_N].Actual_Speed, pid_speed_ead);
     /** 判断电机方向 */
@@ -107,58 +106,62 @@ float Motor_LocationControl(MotorControl_t *UserMotor, Motor_TypeDef Motor_N)
 void MotorHandle(void)
 {
     static uint8_t location_timer;
-    static uint8_t Angle_timer;
     uint16_t Motor_Speed[MSum];
+    int16_t MotorGetOffset;
     /** 当前时刻总计数值 = 计数器值 + 计数溢出次数 * ENCODER_TIM_PERIOD  */
     Motor[MLeft].Count = __HAL_TIM_GET_COUNTER(&MLeftEncoder_TIM) + (Motor_Encoder[MLeft].Period * 65535);
     Motor[MRight].Count = __HAL_TIM_GET_COUNTER(&MRightEncoder_TIM) + (Motor_Encoder[MRight].Period * 65535);
+    Motor[MLeft].Actual_Target =
+        (int32_t) ((Motor[MLeft].Count * 210.0 / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO));
+    Motor[MRight].Actual_Target =
+        (int32_t) ((Motor[MRight].Count * 210.0 / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO));
     if (location_timer++ % 2 == 0) {
-        int16_t MotorGetOffset;
-        if (Angle_timer++ % 2 == 0)
-            switch (MotorCore.Status) {
-                case Motor_Location: {
-                    MotorOffset[MLeft] = 0;
-                    MotorOffset[MRight] = 0;
-                    break;
-                }
-                case Motor_Location_line: {
-                    if (MotorCore.Line.Status == Motor_Beeline) {
-                        MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL) +
-                            pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Angle), pid_NULL);
+        switch (MotorCore.Status) {
+            case Motor_Location: {
+                /** 设置pid目标值 */
+                pid_location[MLeft].target_val =
+                    (float) (((Motor[MLeft].TargetValue) * ENCODER_TOTAL_RESOLUTION * REDUCTION_RATIO)
+                        / 210.0);
+                /** 设置pid目标值 */
+                pid_location[MRight].target_val =
+                    (float) (((Motor[MRight].TargetValue) * ENCODER_TOTAL_RESOLUTION * REDUCTION_RATIO)
+                        / 210.0);
+                /** 设置pid目标值 */
+                pid_speed[MLeft].target_val = Motor_LocationControl(Motor, MLeft);
+                /** 设置pid目标值 */
+                pid_speed[MRight].target_val = Motor_LocationControl(Motor, MRight);
+                break;
+            }
+            case Motor_Location_line: {
+                if (MotorCore.Line.Status == Motor_Beeline || MotorCore.Line.Angle > 13) {
+                    MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL)
+                        + pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Offset), pid_NULL);
 //                        if (MotorGetOffset > 6) {
 //                            MotorGetOffset = 6;
 //                        }
 //                        else if (MotorGetOffset < -6) {
 //                            MotorGetOffset = -6;
 //                        }
-                        MotorOffset[MLeft] -= MotorGetOffset;
-                        MotorOffset[MRight] += MotorGetOffset;
-                    }
-                    break;
                 }
-                case Motor_Location_Angle: {
-                    MotorGetOffset = pid_realize(&pid_Angle, (float) (MotorCore.Angle.Y - MotorCore.Actual_Angle.Y),
-                                                 pid_NULL);
-//                MotorGetOffset = (MotorCore.Actual_Angle.Y - MotorCore.Angle.Y);
-                    MotorOffset[MLeft] += MotorGetOffset;
-                    MotorOffset[MRight] -= MotorGetOffset;
-                    break;
-                }
-                default:Error_Handler();
-                    break;
+                else
+                    MotorGetOffset = 0;
+                /** 设置pid目标值 */
+                pid_speed[MLeft].target_val = Motor[MLeft].TargetValue - MotorGetOffset;
+                /** 设置pid目标值 */
+                pid_speed[MRight].target_val = Motor[MRight].TargetValue + MotorGetOffset;
+                break;
             }
-        /** 设置pid目标值 */
-        pid_location[MLeft].target_val =
-            (float) (((Motor[MLeft].TargetValue + MotorOffset[MLeft]) * ENCODER_TOTAL_RESOLUTION * REDUCTION_RATIO)
-                / 210.0);
-        /** 设置pid目标值 */
-        pid_location[MRight].target_val =
-            (float) (((Motor[MRight].TargetValue + MotorOffset[MRight]) * ENCODER_TOTAL_RESOLUTION * REDUCTION_RATIO)
-                / 210.0);
-        /** 设置pid目标值 */
-        pid_speed[MLeft].target_val = Motor_LocationControl(Motor, MLeft);
-        /** 设置pid目标值 */
-        pid_speed[MRight].target_val = Motor_LocationControl(Motor, MRight);
+            case Motor_Location_Angle: {
+                MotorGetOffset = pid_realize(&pid_Angle, (float) (MotorCore.Angle.Y - MotorCore.Actual_Angle.Y),
+                                             pid_NULL);
+//                MotorGetOffset = (MotorCore.Actual_Angle.Y - MotorCore.Angle.Y);
+                MotorOffset[MLeft] += MotorGetOffset;
+                MotorOffset[MRight] -= MotorGetOffset;
+                break;
+            }
+            default:Error_Handler();
+                break;
+        }
     }
     //    /** 设置pid目标值 */
 //    pid_speed[MLeft].target_val = (float) Motor[MLeft].TargetValue;
@@ -168,14 +171,15 @@ void MotorHandle(void)
     Motor_Speed[MRight] = (uint16_t) Motor_SpeedControl(Motor, MRight);
     TTS_MotorMove(MLeft, Motor_Speed[MLeft]);
     TTS_MotorMove(MRight, Motor_Speed[MRight]);
-//    char CBuff[50];
+    char CBuff[50];
+    sprintf(CBuff, "{B%d:%d:}$", (int16_t) Motor[MLeft].Actual_Target, (int16_t) Motor[MLeft].TargetValue);
 //    sprintf(CBuff, "{B%d:%d:}$", (int16_t) MotorCore.Angle.Y, (int16_t) MotorCore.Actual_Angle.Y);
 //    sprintf(CBuff, "{B%d:%d:}$", (int16_t) Motor[MRight].Actual_Speed, (int16_t) pid_speed[MRight].target_val);
 //    sprintf(CBuff,
 //            "{B%d:%d:}$",
 //            (int16_t) ((Motor[MRight].TargetValue * ENCODER_TOTAL_RESOLUTION * REDUCTION_RATIO) / 210.0),
 //            (int16_t) Motor[MRight].Count);
-//    TTSQueue_SendByte_(ATTask_Debug, CBuff);
+    TTSQueue_SendByte_(ATTask_Debug, CBuff);
 }
 
 void EncoderHandle(Motor_TypeDef Motor_N, _Bool Flag)
@@ -188,37 +192,77 @@ void EncoderHandle(Motor_TypeDef Motor_N, _Bool Flag)
 
 void TTS_MotorSetMove(int32_t L, int32_t R)
 {
-    Motor[MLeft].TargetValue += L;
-    Motor[MRight].TargetValue += R;
+    switch (MotorCore.Status) {
+        case Motor_Location: {
+            Motor[MLeft].TargetValue += L;
+            Motor[MRight].TargetValue += R;
+            break;
+        }
+        case Motor_Location_line: {
+            Motor[MLeft].TargetValue = L;
+            Motor[MRight].TargetValue = R;
+            break;
+        }
+        case Motor_Location_Angle: {
+            Motor[MLeft].TargetValue += L;
+            Motor[MRight].TargetValue += R;
+            break;
+        }
+    }
 }
 
+_Bool MotorCoreSetStatus(MotorStatus_t Status)
+{
+    if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0) {
+        MotorCore.Status = Status;
+        TTS_MotorSetZero();
+        switch (Status) {
+            case Motor_Location: {
+
+                break;
+            }
+            case Motor_Location_line: {
+                Motor[MLeft].TargetValue = 0;
+                Motor[MRight].TargetValue = 0;
+                break;
+            }
+            case Motor_Location_Angle: {
+                break;
+            }
+        }
+        return 1;
+    }
+    return 0;
+}
 void TTS_MotorSetStop(void)
 {
-    Motor[MLeft].TargetValue =
-        (int32_t) ((Motor[MLeft].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0) + 105;
-    Motor[MRight].TargetValue =
-        (int32_t) ((Motor[MRight].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0) + 105;
+    Motor[MLeft].TargetValue = 0;
+    Motor[MRight].TargetValue = 0;
 }
 
 void TTS_MotorSetZero(void)
 {
-    if (Motor[MLeft].TargetValue
-        == (int32_t) (((Motor[MLeft].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0)) &&
-        Motor[MRight].TargetValue
-            == (int32_t) (((Motor[MRight].TargetValue / ENCODER_TOTAL_RESOLUTION / REDUCTION_RATIO) * 210.0))
-        ) {
-        Motor[MLeft].TargetValue = 0;
-        Motor[MRight].TargetValue = 0;
-        MotorOffset[MLeft] = 0;
-        Motor_Encoder[MLeft].Period = 0;
-        Motor[MLeft].Actual_Speed = 0;
-        Motor[MLeft].Count = 0;
+
+    if (Motor[MLeft].Actual_Speed == 0 && Motor[MRight].Actual_Speed == 0) {
         __HAL_TIM_SET_COUNTER(&MLeftEncoder_TIM, 0);
-        MotorOffset[MRight] = 0;
-        Motor_Encoder[MRight].Period = 0;
-        Motor[MRight].Actual_Speed = 0;
-        Motor[MRight].Count = 0;
         __HAL_TIM_SET_COUNTER(&MRightEncoder_TIM, 0);
+        Motor_Encoder[MLeft].Period = 0;
+        Motor_Encoder[MRight].Period = 0;
+
+        Motor[MLeft].State = Motor_Shutoff;
+        Motor[MLeft].TargetValue = 0;
+        Motor[MLeft].Actual_Speed = 0;
+        Motor[MLeft].Actual_Target = 0;
+        Motor[MLeft].Last_Count = 0;
+        Motor[MLeft].Count = 0;
+
+        Motor[MRight].State = Motor_Shutoff;
+        Motor[MRight].TargetValue = 0;
+        Motor[MRight].Actual_Speed = 0;
+        Motor[MRight].Actual_Target = 0;
+        Motor[MRight].Last_Count = 0;
+        Motor[MRight].Count = 0;
+
     }
 }
 

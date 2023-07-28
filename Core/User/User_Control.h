@@ -9,23 +9,31 @@ uint16_t mpu_count;
 
 void Control_Proc(void)
 {
+    static uint8_t TIme = 0;
     if (MotorCore.Flag)
         switch (MotorCore.Task.Set) {
             case MotorTask_Stop:
 //    MotorCore.Status = Motor_Location_Angle;
-                MotorCore.Status = Motor_Location;
+//                MotorCore.Status = Motor_Location;
+                if (++TIme < 3) {
+                    MotorCore.Task.Set = MotorTaskCrossroad;
+                    MotorCore.Task.Line_Status = MotorCrossroad;
+                }
+                else if (TIme == 3) {
+                    MotorCore.Task.Set = MotorTaskCrossroad;
+                    MotorCore.Task.Line_Status = Motor_T_line;
+                }
                 break;
-            case MotorTask_Beeline:
-
-                break;
+            case MotorTask_Beeline:break;
             case MotorTaskCrossroad: {
                 if (MotorCore.Task.Line_Status == Motor_LineNLL) {
-                    MotorCore.Status = Motor_Location;
+                    if (MotorCoreSetStatus(Motor_Location))
+                        MotorCore.Task.Set = MotorTask_Stop;
                 }
                 else {
-                    MotorCore.Status = Motor_Location_line;
-                    MotorCore.Task.Line_Status = MotorCrossroad;
-                    TTS_MotorSetMove(210, 210);
+                    if (MotorCoreSetStatus(Motor_Location_line)) {
+                        TTS_MotorSetMove(80, 80);
+                    }
                 }
                 break;
             }

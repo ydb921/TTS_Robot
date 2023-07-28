@@ -11,6 +11,7 @@
  *
  */
 #include <stdint.h>
+#include "stm32f407xx.h"
 
 typedef enum
 {
@@ -42,7 +43,7 @@ typedef enum
     Motor_T_Left,        //左边T型路口
     Motor_T_Right,        //右边T型路口
     Motor_Left,     //左转
-    Motor_Right ,    //右转
+    Motor_Right,    //右转
     Motor_LineNLL
 } MotorLine_t;
 
@@ -73,11 +74,12 @@ typedef struct
 
 typedef struct
 {
-    int32_t Count;
+    __IO int32_t Count;
+    __IO int32_t Last_Count;
     int32_t Actual_Target;  //当前位置
-    int32_t Actual_Speed;   //实际速度
-    int32_t TargetValue;    //目标位置/当前速度
-    Motor_SetState State;   //状态
+    __IO int32_t Actual_Speed;   //实际速度
+    __IO int32_t TargetValue;    //目标位置/当前速度
+    __IO Motor_SetState State;   //状态
     MotorFlag_t Flag;       //电机标志
 } MotorControl_t;
 
@@ -86,6 +88,7 @@ typedef struct
     MotorLine_t Status;
     int8_t Offset;
     int8_t Angle;
+    _Bool Flag;
 } LineWalking_t;
 
 typedef struct
@@ -122,4 +125,5 @@ void TTS_MotorMove(uint8_t ID, uint16_t Speed);
 void TTS_MotorFeedback_Config(MotorFeedback_t *User_Feedback);
 void TTS_MotorSetStop(void);
 void TTS_MotorSetZero(void);
+_Bool MotorCoreSetStatus(MotorStatus_t Status);
 #endif/*_TTS_MOTOR_H*/
