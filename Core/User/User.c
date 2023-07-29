@@ -40,7 +40,6 @@ void UserProc(void)
 //        MPU_Get_Accelerometer(&aacx, &aacy, &aacz);    //得到加速度传感器数据
 //        MPU_Get_Gyroscope(&gyrox, &gyroy, &gyroz);    //得到陀螺仪数据
 //        sprintf(arr_AT, "{A%d:%d:%d:%d}$", MotorCore.LineOffset, MotorCore.LineAngle, 0, (int16_t) yaw);
-
 //        TTSQueue_SendByte_(ATTask_Debug, arr_AT);
 //                printf("三轴角度：%.2f  %.2f  %.2f\r\n", pitch, roll, yaw);
 //        printf("三轴加速度：%d-%d-%d\r\n",aacx,aacy,aacz);
@@ -75,19 +74,19 @@ void User_Create_task(void)
         Error_Handler();
     if (TTS_TimerCreation(OS_Timer_Time, Time_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
-    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 1000, TTS_Timer_START) != TTS_Timer_START)
+    if (TTS_TimerCreation(OS_MPU_Clock, MPU_Proc, 100, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
     if (TTS_TimerCreation(OS_Motor_Clock, MotorHandle, 10, TTS_Timer_START) != TTS_Timer_START)
         Error_Handler();
     TTS_SetStatus(OS_TASK_Queue, OS_RUN);
-    MotorCore.Task.Set = MotorTaskCrossroad;
+//    MotorCore.Task.Set = MotorTaskCrossroad;
 //    MotorCoreSetStatus(Motor_Location_line);
 //    TTS_MotorSetMove(Default_SPEED, Default_SPEED);
 }
 
 void User_Bsp_Init(void)
 {
-    HAL_Delay(10);//等待系统稳定运行
+    HAL_Delay(2);//等待系统稳定运行
     /* Task Init */
     TTS_TaskInit(OS_TASK_SUM);
     /* Buzzer&Led Init */

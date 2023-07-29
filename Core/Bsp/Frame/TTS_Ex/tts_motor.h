@@ -97,7 +97,7 @@ typedef struct
 
 typedef struct
 {
-    MotorSetTask_t Set;
+    MotorSetTask_t State;
     MotorLine_t Line_Status;
 } MotorTask_t;
 

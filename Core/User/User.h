@@ -44,4 +44,5 @@ void User_Bsp_Init(void);
 
 void Spcp_Callback(uint8_t ID, uSPCPData_t *Data, uint8_t Length, const uint8_t *FrameData);
 
+void Control_lineProc(void);
 #endif //USER_H
