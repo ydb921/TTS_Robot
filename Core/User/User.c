@@ -47,6 +47,7 @@ void UserProc(void)
     }
     else if (MotorCore.Flag == DISABLE && mpu_dmp_init() == 0)
         MotorCore.Flag = ENABLE;
+
 }
 
 static void Time_Proc(void)
@@ -58,11 +59,15 @@ static void MPU_Proc(void)
 {
     if (++mpu_count == 6000)mpu_count = 0;
 }
-
+static void PinProc(void)
+{
+    TTS_PinProc();
+    ultrasonicProc();
+}
 void User_Create_task(void)
 {
     /** Task Creation **/
-    if (TTS_TaskCreation(OS_TASK_Pin, TTS_PinProc, TTS_PinProcTick, OS_RUN) != OS_RUN)
+    if (TTS_TaskCreation(OS_TASK_Pin, PinProc, TTS_PinProcTick, OS_RUN) != OS_RUN)
         Error_Handler();
     if (TTS_TaskCreation(OS_TASK_Button, TTS_ButtonProc, TTS_ButtonProcTick, OS_RUN) != OS_RUN)
         Error_Handler();
@@ -86,7 +91,7 @@ void User_Create_task(void)
 
 void User_Bsp_Init(void)
 {
-    HAL_Delay(2);//等待系统稳定运行
+    HAL_Delay(1);//等待系统稳定运行
     /* Task Init */
     TTS_TaskInit(OS_TASK_SUM);
     /* Buzzer&Led Init */
@@ -104,7 +109,7 @@ void User_Bsp_Init(void)
     HAL_TIM_Base_Start_IT(&User_Timer_Tim);
     /* MPU Init */
     while (MPU_Init())//初始化MPU6050
-        Delay_ms(50);
+        Delay_ms(2);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -123,4 +128,14 @@ void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
 //        MotorRPeriod();
 //    else if (htim == &MLeft_TIM)
 //        MotorLPeriod();
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim9.Instance == htim->Instance) {
+        if (HAL_TIM_ACTIVE_CHANNEL_2 == htim->Channel)
+            HC_SR04Time(USER_HC_SR04[HC_SR04_Right], *htim, TIM_CHANNEL_2);
+        if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
+            HC_SR04Time(USER_HC_SR04[HC_SR04_left], *htim, TIM_CHANNEL_1);
+    }
 }
