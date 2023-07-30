@@ -109,7 +109,7 @@ void User_Bsp_Init(void)
     HAL_TIM_Base_Start_IT(&User_Timer_Tim);
     /* MPU Init */
     while (MPU_Init())//≥ı ºªØMPU6050
-        Delay_ms(2);
+        Delay_ms(1);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

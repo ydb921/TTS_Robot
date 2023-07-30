@@ -18,10 +18,12 @@
 /* 4倍频后的总分辨率 */
 #define ENCODER_TOTAL_RESOLUTION             (ENCODER_RESOLUTION * 4)
 
-/*舵机 180 角度计算*/
-#define STEERING_GEAR_ANGLE(angle) (0.5 + (angle) / 180.0 * (2.5 - 0.5)) / 20.0 * 2000;    // 计算角度对应的占空比
-/*车头方向计算 2000是定时器周期*/
 
+
+/*舵机 270 角度计算*/
+#define  STEERING_GEAR_MAX_PWM 2000
+#define STEERING_GEAR_ANGLE(angle) ((0.5 + (angle) / 270.0 * (2.5 - 0.5)) / 20.0 * STEERING_GEAR_MAX_PWM)    //  计算角度对应的占空比
+/*车头方向计算 2000是定时器周期*/
 #define Headstock_ANGLE(angle) (uint16_t)((0.5 + (90-angle) / 180.0 * (2.5 - 0.5)) / 20.0 * __HAL_TIM_GET_AUTORELOAD(&MDir_TIM))    // 计算角度对应的占空比
 
 typedef enum

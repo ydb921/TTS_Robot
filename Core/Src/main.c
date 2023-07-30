@@ -101,6 +101,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_TIM9_Init();
   MX_UART5_Init();
+  MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
   hal_CPUInit();
   User_Bsp_Init();

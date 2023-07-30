@@ -54,11 +54,13 @@ void Motor_Init(MotorControl_t *User_Motor)
     pid_init(&pid_location[MLeft], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_location[MRight], (float) 0.158, (float) 0.0002, (float) 0);
     pid_init(&pid_Angle, (float) 0.40, (float) 0.00, (float) 6.2);
-    pid_init(&pid_Line, (float) 0.6, (float) 0.00, (float)  0.00);
+    pid_init(&pid_Line, (float) 0.6, (float) 0.00, (float) 0.00);
     pid_init(&pid_Line_Theta, (float) 0.3, (float) 0.00, (float) 0.0);
-    while (0) {
+    HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
+        __HAL_TIM_SetCompare (&htim12, TIM_CHANNEL_1, STEERING_GEAR_ANGLE(0));
+        __HAL_TIM_SetCompare (&htim12, TIM_CHANNEL_2, STEERING_GEAR_ANGLE(0));
 
-    }
 }
 
 float Motor_SpeedControl(MotorControl_t *UserMotor, Motor_TypeDef Motor_N)
@@ -161,8 +163,8 @@ void MotorHandle(void)
             }
             case Motor_Location_line: {
 //                if (MotorCore.Line.Status == Motor_Beeline || MotorCore.Line.Angle > 10) {
-                    MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL) +
-                        pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Offset), pid_NULL);
+                MotorGetOffset = pid_realize(&pid_Line, (float) (MotorCore.Line.Offset), pid_NULL) +
+                    pid_realize(&pid_Line_Theta, (float) (MotorCore.Line.Offset), pid_NULL);
 //                }
 //                else
 //                    MotorGetOffset = 0;
