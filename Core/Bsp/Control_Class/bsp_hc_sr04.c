@@ -23,14 +23,12 @@ _Bool HC_SR04Distance(HC_SR04_t *User, TIM_HandleTypeDef *htim,
             User->Capture_Cnt++;
             break;
         case 3:
-
             if (User->ECho_Time_TTL_H > User->ECho_Time_TTL_L)
                 Distance = ((User->ECho_Time_TTL_H - User->ECho_Time_TTL_L) / 1000000.0) * 340.0 / 2.0 * 100.0;
             else
                 Distance =
                     (((User->ECho_Time_TTL_H + 65535) - User->ECho_Time_TTL_L) / 1000000.0) * 340.0 / 2.0 * 100.0;
-
-            User->Distance = wave_filtering(User, Distance);
+            User->Distance = First_order_filter(Distance, 0.33, 1.7, 0.01);
             if (User->Distance > 350)
                 User->Distance = 999;
             delay_us(10);
