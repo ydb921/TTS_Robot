@@ -20,32 +20,41 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1a7769e-ede9-41c8-848c-7cbef6e3ac62" name="更改" comment="优化两个超声波">
+    <list default="true" id="a1a7769e-ede9-41c8-848c-7cbef6e3ac62" name="更改" comment="增加两个舵机">
+      <change afterPath="$PROJECT_DIR$/Core/Bsp/Show_Class/oled.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/Bsp/Show_Class/oled.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/Bsp/Show_Class/oledfont.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mxproject" beforeDir="false" afterPath="$PROJECT_DIR$/.mxproject" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Bsp/Control_Class/bsp_motor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Inc/tim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Inc/tim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Inc/main.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Inc/main.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Inc/stm32f4xx_hal_conf.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Inc/stm32f4xx_hal_conf.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Inc/stm32f4xx_it.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Inc/stm32f4xx_it.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Src/gpio.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/gpio.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/tim.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/tim.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Src/stm32f4xx_it.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/stm32f4xx_it.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/User/User.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User_Control.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User_Control.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/User/User_display.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/User/User_display.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TTS_Robot.ioc" beforeDir="false" afterPath="$PROJECT_DIR$/TTS_Robot.ioc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-07-30T01-05-32-0339.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-72d2a418985ae1a5539c.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-TTS_Robot.elf-Debug-a4cd6dbb18f679160511.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.25.2/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_hc_sr04.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_hc_sr04.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_motor.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/Control_Class/bsp_motor.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/MPU6050/inv_mpu_dmp_motion_driver.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Bsp/MPU6050/inv_mpu_dmp_motion_driver.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/gpio.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/gpio.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/main.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/tim.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/tim.c.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/stm32f4xx_it.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/Src/stm32f4xx_it.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/User/User.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TTS_Robot.elf.dir/Core/User/User.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.elf" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.hex" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.hex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.map" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/TTS_Robot.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +102,7 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Project/20230725_diansai/TTS_Robot/Core/Bsp/Control_Class&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Project/20230725_diansai/TTS_Robot/Core/Bsp/Show_Class&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -106,6 +115,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Project\20230725_diansai\TTS_Robot\Core\Bsp\Show_Class" />
       <recent name="D:\Project\20230725_diansai\TTS_Robot\Core\Bsp\Control_Class" />
       <recent name="D:\Project\20230725_diansai\TTS_Robot\Core\Startup" />
       <recent name="D:\Project\20230725_diansai\TTS_Robot\Core" />
@@ -115,12 +125,12 @@
     </key>
   </component>
   <component name="RunManager" selected="OpenOCD 下载并运行.OCD TTS_Robot">
-    <configuration name="TTS_Robot.elf" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="TTS_Robot" TARGET_NAME="TTS_Robot.elf" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="TTS_Robot" RUN_TARGET_NAME="TTS_Robot.elf">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="TTS_Robot.elf" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="TTS_Robot" TARGET_NAME="TTS_Robot.elf" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="TTS_Robot" RUN_TARGET_NAME="TTS_Robot.elf">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -149,7 +159,8 @@
       <workItem from="1690551739100" duration="103000" />
       <workItem from="1690590030614" duration="9039000" />
       <workItem from="1690634082624" duration="4739000" />
-      <workItem from="1690676678890" duration="18586000" />
+      <workItem from="1690676678890" duration="22981000" />
+      <workItem from="1690762640361" duration="7495000" />
     </task>
     <task id="LOCAL-00001" summary="摄像头巡线+陀螺仪方向矫正+多级串级PID">
       <option name="closed" value="true" />
@@ -223,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690705436101</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="增加两个舵机">
+      <option name="closed" value="true" />
+      <created>1690721904994</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1690721904994</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +279,8 @@
     <MESSAGE value="入口，出库到T型交叉路口" />
     <MESSAGE value="增加超声波" />
     <MESSAGE value="优化两个超声波" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化两个超声波" />
+    <MESSAGE value="增加两个舵机" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加两个舵机" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

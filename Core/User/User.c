@@ -9,6 +9,7 @@
 #include "User_key.h"
 /*APP控制*/
 #include "User_Control.h"
+#include "spi.h"
 
 /* 定时器任务句柄 */
 static Stu_TimerTypeDef OS_Timer[OS_Timer_SUM];
@@ -18,6 +19,7 @@ Time_TypeDef CurrentTime;
 
 void UserProc(void)
 {
+
     char arr_AT[30];
     if (MotorCore.Flag && mpu_dmp_get_data(&pitch, &roll, &yaw) == 0) {
         MotorCore.Actual_Angle.X = (pitch);
@@ -28,11 +30,11 @@ void UserProc(void)
 //                MPU_Get_Accelerometer(&aacx, &aacy, &aacz);    //得到加速度传感器数据
 //                MPU_Get_Gyroscope(&gyrox, &gyroy, &gyroz);    //得到陀螺仪数据
 //        sprintf(arr_AT, "{A%d:%d:%d:%d}$", MotorCore.LineOffset, MotorCore.LineAngle, 0, (int16_t) yaw);
-        sprintf(arr_AT,
-                "{A%d:%d:%d:%d}$",
-                MotorCore.Line.Offset, MotorCore.Line.Angle,
-                MotorCore.Line.Status, (int16_t) (MotorCore.Actual_Angle.Y));
-        TTSQueue_SendByte_(ATTask_Debug, arr_AT);
+//        sprintf(arr_AT,
+//                "{A%d:%d:%d:%d}$",
+//                MotorCore.Line.Offset, MotorCore.Line.Angle,
+//                MotorCore.Line.Status, (int16_t) (MotorCore.Actual_Angle.Y));
+//        TTSQueue_SendByte_(ATTask_Debug, arr_AT);
 //                printf("三轴角度：%.2f  %.2f  %.2f\r\n", pitch, roll, yaw);
 //        printf("三轴加速度：%d-%d-%d\r\n",aacx,aacy,aacz);
 //        printf("三轴角角度：%d-%d-%d\r\n",gyrox,gyroy,gyroz);
@@ -59,11 +61,13 @@ static void MPU_Proc(void)
 {
     if (++mpu_count == 6000)mpu_count = 0;
 }
+
 static void PinProc(void)
 {
     TTS_PinProc();
     ultrasonicProc();
 }
+
 void User_Create_task(void)
 {
     /** Task Creation **/
@@ -91,6 +95,7 @@ void User_Create_task(void)
 
 void User_Bsp_Init(void)
 {
+
     HAL_Delay(1);//等待系统稳定运行
     /* Task Init */
     TTS_TaskInit(OS_TASK_SUM);
@@ -107,7 +112,10 @@ void User_Bsp_Init(void)
     /* Time Init */
     TTS_TimerInit(OS_Timer, OS_Timer_SUM);
     HAL_TIM_Base_Start_IT(&User_Timer_Tim);
-    /* MPU Init */
+    /* Display Init */
+    OLED_Init();
+    OLED_Clear();
+//    /* display Init */
     while (MPU_Init())//初始化MPU6050
         Delay_ms(1);
 }

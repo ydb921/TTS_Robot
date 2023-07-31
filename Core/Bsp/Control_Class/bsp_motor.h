@@ -18,8 +18,6 @@
 /* 4倍频后的总分辨率 */
 #define ENCODER_TOTAL_RESOLUTION             (ENCODER_RESOLUTION * 4)
 
-
-
 /*舵机 270 角度计算*/
 #define  STEERING_GEAR_MAX_PWM 2000
 #define STEERING_GEAR_ANGLE(angle) ((0.5 + (angle) / 270.0 * (2.5 - 0.5)) / 20.0 * STEERING_GEAR_MAX_PWM)    //  计算角度对应的占空比

@@ -45,6 +45,7 @@ void Control_lineProc(void)
 void Control_Proc(void)
 {
     static uint8_t TIme = 0;
+    Display();
     ultrasonicProc();
     if (MotorCore.Flag == DISABLE)
         return;
